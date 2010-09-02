@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.w3.org" 
+	id="assSyntaxTree" version="0.0.5" ilias_min_version="3.10.0" ilias_max_version="3.10.999">
+</plugin>

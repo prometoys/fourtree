@@ -1,0 +1,25 @@
+<div xmlns:xhtml="http://www.w3.org/1999/xhtml" class="ilc_Question">
+	{QUESTIONTEXT}
+<!-- BEGIN syntaxtree_row -->
+	<div class="syntaxtree">
+  		<fieldset>
+  		<h4>{COUNTER}. {TEXT_PHRASE_HEADER}:</h4>
+  		<textarea id="SYNTAXTREE_{TEXTFIELD_ID}" name="SYNTAXTREE_{TEXTFIELD_ID}" onkeyup="bracketCount(this, '{TEXTFIELD_ID}')" cols="70" rows="4">{TEXTFIELD_VALUE}</textarea>
+  		
+	    <div id="actions">
+	        <button name="syntaxtree_draw_btn_{TEXTFIELD_ID}" id="syntaxtree_draw_btn_{TEXTFIELD_ID}" onclick="document.getElementById('syntaxtree_graph_{TEXTFIELD_ID}').src='{GRAPHPATH}?syntaxTreeData='+Url.encode(document.getElementById('SYNTAXTREE_{TEXTFIELD_ID}').value); return false;">Draw</button> 
+	        {TEXT_OPEN_BRACKETS}: 
+	        <input type="text" class="readonly" name="opencount_{TEXTFIELD_ID}" size="2" readonly="readonly" />
+	        {TEXT_CLOSED_BRACKETS}: 
+	        <input type="text" class="readonly" name="closedcount_{TEXTFIELD_ID}" size="2" readonly="readonly" />
+	    </div>
+	    </fieldset>
+	    <script type="text/javascript">
+  			bracketCount(document.getElementById('SYNTAXTREE_{TEXTFIELD_ID}'), '{TEXTFIELD_ID}');
+  		</script>
+  		<div class="graph">
+    		<img id="syntaxtree_graph_{TEXTFIELD_ID}" src="{GRAPHPATH}?syntaxTreeData={TEXT_YOUR_GRAPH}" alt="SyntaxTree" />
+		</div>
+  	</div>
+<!-- END syntaxtree_row -->
+</div>

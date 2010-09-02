@@ -1,0 +1,117 @@
+/*
+** phpSyntaxTree - Default stylesheet
+** $Id: default.css,v 1.9 2006/07/21 22:27:32 int2str Exp $
+*/
+
+.syntaxtree {
+    color: black;
+    background-color: #fff;
+    font-family: "Bitsream Vera Sans",Helvetica,Arial,sans-serif;
+    font-size: 0.9em;
+    margin: 0;
+    padding: 0;
+}
+
+.syntaxtree #svg img {
+    border: 0;
+}
+
+.syntaxtree #svg {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.syntaxtree  #phrase {
+    display: none;
+}
+
+.syntaxtree  #graph {
+    text-align: center;
+}
+
+.syntaxtree  #graph img {
+    border: 0;
+}
+
+.syntaxtree  #form2 {
+    top: 28px;
+    left: 0;
+    width: 100%;
+    position: absolute;
+}
+
+.syntaxtree  #options {
+    text-align: left;
+}
+
+.syntaxtree  button {
+    font-weight: bold;
+    font-size: 0.9em;
+    color: black;
+    background-color: #fefefe;
+    padding: 3px 10px;
+    margin-right: 10px;
+}
+
+.syntaxtree  button:hover {
+    color: #900;
+    background-color: #fff;
+    border: 1px solid #444;
+}
+
+.syntaxtree  textarea {
+    width: 100%;
+}
+
+.syntaxtree  fieldset {
+    color: black;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    margin: 10px 0;
+}
+
+.syntaxtree  #actions {
+    font-size: 0.8em;
+}
+
+.syntaxtree  .readonly {
+    border: 0;
+    text-align: center;
+    background-color: transparent;
+}
+
+.syntaxtree h2 {
+    font-size: 1.1em;
+    border-bottom: 1px solid silver;
+    padding: 0 0 5px 0;
+}
+
+.syntaxtree h3 {
+    font-size: 1em;
+    margin: 0;
+    padding: 0;
+}
+
+.syntaxtree h4 {
+    margin: 0;
+}
+
+.syntaxtree p {
+    margin: 5px 0 10px 0;
+}
+
+#tip {
+    color: #555;
+    text-align: center;
+    font-style: italic;
+}
+
+.syntaxtree textarea {
+    padding: 2px;
+}
+
+.syntaxtree textarea, button, select {
+    border: 1px solid #ccc;
+}
+

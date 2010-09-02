@@ -1,0 +1,8 @@
+<#1>
+DROP TABLE IF EXISTS il_qpl_qst_syntaxtree_table1;
+CREATE table `il_qpl_qst_syntaxtree_table1`
+(
+	id INT NOT NULL PRIMARY KEY,
+	name VARCHAR(100)
+) TYPE=MyISAM;
+
