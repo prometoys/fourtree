@@ -20,4 +20,4 @@ CREATE TABLE IF NOT EXISTS `il_qpl_qst_syntaxtree_answer` (
 ) ENGINE=MyISAM;
 
 <#2>
-REPLACE INTO `qpl_question_type`(type_tag, plugin) VALUES ('SyntaxTree', 1);
+REPLACE INTO `qpl_qst_type`(type_tag, plugin) VALUES ('SyntaxTree', 1);

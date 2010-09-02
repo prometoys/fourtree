@@ -78,7 +78,7 @@ class SyntaxTree extends assQuestion
 	* @access public
 	* @see assQuestion:assQuestion()
 	*/
-	function SyntaxTree(
+	function __construct(
 		$title = "",
 		$comment = "",
 		$author = "",
@@ -86,7 +86,7 @@ class SyntaxTree extends assQuestion
 		$question = ""
 	  )
 	{
-		$this->assQuestion($title, $comment, $author, $owner, $question);
+		parent::__construct($title, $comment, $author, $owner, $question);
 		$this->answers = array();
 		$this->correctanswers = 0;
 	}
@@ -146,9 +146,12 @@ class SyntaxTree extends assQuestion
 		{
 			// Neuen Datensatz schreiben
 			$now = getdate();
+			$next_id = $ilDB->nextId('qpl_questions'); 
+			$tstamp = array("integer", time());
 			$question_type = $this->getQuestionTypeID();
 			$created = sprintf("%04d%02d%02d%02d%02d%02d", $now['year'], $now['mon'], $now['mday'], $now['hours'], $now['minutes'], $now['seconds']);
-			$query = sprintf("INSERT INTO qpl_questions (question_id, question_type_fi, obj_fi, title, comment, author, owner, question_text, points, working_time, complete, created, original_id, TIMESTAMP) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NULL)",
+			$query = sprintf("INSERT INTO qpl_questions (question_id, question_type_fi, obj_fi, title, description, author, owner, question_text, points, working_time, complete, created, original_id, tstamp) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+				$ilDB->quote($next_id),
 				$ilDB->quote($question_type),
 				$ilDB->quote($this->obj_id),
 				$ilDB->quote($this->title),
@@ -160,7 +163,8 @@ class SyntaxTree extends assQuestion
 				$ilDB->quote($estw_time),
 				$ilDB->quote("$complete"),
 				$ilDB->quote($created),
-				$original_id
+				$original_id,
+				$ilDB->quote($tstamp)
 			);
 			$result = $ilDB->query($query);
 			
@@ -192,7 +196,7 @@ class SyntaxTree extends assQuestion
 		else
 		{
 			// Vorhandenen Datensatz aktualisieren
-			$query = sprintf("UPDATE qpl_questions SET obj_fi = %s, title = %s, comment = %s, author = %s, question_text = %s, points = %s, working_time=%s, complete = %s WHERE question_id = %s",
+			$query = sprintf("UPDATE qpl_questions SET obj_fi = %s, title = %s, description = %s, author = %s, question_text = %s, points = %s, working_time=%s, complete = %s WHERE question_id = %s",
 				$ilDB->quote($this->obj_id. ""),
 				$ilDB->quote($this->title),
 				$ilDB->quote($this->comment),
@@ -264,7 +268,7 @@ class SyntaxTree extends assQuestion
 			$data = $result->fetchRow(MDB2_FETCHMODE_OBJECT);
 			$this->id = $question_id;
 			$this->title = $data->title;
-			$this->comment = $data->comment;
+			$this->comment = $data->description;
 			$this->solution_hint = $data->solution_hint;
 			$this->original_id = $data->original_id;
 			$this->obj_id = $data->obj_fi;
@@ -714,11 +718,15 @@ class SyntaxTree extends assQuestion
 			{
 				if (strlen($value))
 				{
-					$query = sprintf("INSERT INTO tst_solutions (solution_id, active_fi, question_fi, value1, value2, pass, TIMESTAMP) VALUES (NULL, %s, %s, %s, NULL, %s, NULL)",
+					$tstamp = array("integer", time());
+					$next_id = $ilDB->nextId('tst_solutions'); 
+					$query = sprintf("INSERT INTO tst_solutions (solution_id, active_fi, question_fi, value1, value2, pass, tstamp) VALUES (%s, %s, %s, %s, NULL, %s, %s)",
+						$ilDB->quote($next_id),
 						$ilDB->quote($active_id),
 						$ilDB->quote($this->getId()),
 						$ilDB->quote(trim($value)),
-						$ilDB->quote($pass . "")
+						$ilDB->quote($pass . ""),
+						$ilDB->quote($tstamp)
 					);
 					$result = $ilDB->query($query);
 					$entered_values++;
@@ -760,7 +768,7 @@ class SyntaxTree extends assQuestion
 			$estw_time = $this->getEstimatedWorkingTime();
 			$estw_time = sprintf("%02d:%02d:%02d", $estw_time['h'], $estw_time['m'], $estw_time['s']);
 	
-			$query = sprintf("UPDATE qpl_questions SET obj_fi = %s, title = %s, comment = %s, author = %s, question_text = %s, points = %s, working_time=%s, complete = %s WHERE question_id = %s",
+			$query = sprintf("UPDATE qpl_questions SET obj_fi = %s, title = %s, description = %s, author = %s, question_text = %s, points = %s, working_time=%s, complete = %s WHERE question_id = %s",
 				$ilDB->quote($this->obj_id. ""),
 				$ilDB->quote($this->title. ""),
 				$ilDB->quote($this->comment. ""),

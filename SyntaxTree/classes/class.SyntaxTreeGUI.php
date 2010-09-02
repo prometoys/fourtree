@@ -50,13 +50,13 @@ class SyntaxTreeGUI extends assQuestionGUI
 	 * @access public
 	 * @ilCtrl_IsCalledBy SyntaxTreeGUI: ilObjQuestionPoolGUI
 	 */
-	function SyntaxTreeGUI(
+	function __construct(
 	$id = -1
 	)
 	{
 		$this->ownDir = "./Customizing/global/plugins/Modules/TestQuestionPool/Questions/SyntaxTree";
 		$this->cssDir = "./Customizing/global/plugins/Modules/TestQuestionPool/Questions/SyntaxTree/css";
-		$this->assQuestionGUI();
+		parent::__construct();
 		include_once "class.SyntaxTree.php";
 		$this->object = new SyntaxTree();
 		if ($id >= 0)
@@ -255,7 +255,7 @@ class SyntaxTreeGUI extends assQuestionGUI
 		$this->ctrl->setParameter($this, "sel_question_types", "SyntaxTree");
 		$this->tpl->setVariable("ACTION_SYNTAXTREE_TEST", $this->ctrl->getFormAction($this));
 		$this->tpl->setVariable("TEXT_QUESTION_TYPE", $this->lng->txt("qpl_qst_syntaxtree_syntaxtree_question"));
-		$this->outOtherQuestionData();
+		//$this->outOtherQuestionData();
 
 		$this->tpl->parseCurrentBlock();
 		include_once "./Services/RTE/classes/class.ilRTE.php";
@@ -410,7 +410,7 @@ class SyntaxTreeGUI extends assQuestionGUI
 		$this->object->setCorrectAnswers($_POST["correctanswers"]);
 		$this->object->setTextRating($_POST["text_rating"]);
 
-		$saved = $this->writeOtherPostData($result);
+		//$saved = $this->writeOtherPostData($result);
 
 		// Delete all existing answers and create new answers from the form data
 		$this->object->flushAnswers();
