@@ -31,6 +31,6 @@ CREATE TABLE IF NOT EXISTS `il_qpl_qst_syntaxtree_feedback` (
   `answer` int(11) unsigned NOT NULL default '0',
   `feedback` text NOT NULL, 
   `tstamp` int(11) unsigned NOT NULL default '0',
-  PRIMARY KEY (`feedback_id),
+  PRIMARY KEY (`feedback_id`),
   KEY `question_fi` (`question_fi`)
 ) ENGINE=MyISAM;

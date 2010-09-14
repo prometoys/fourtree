@@ -884,7 +884,7 @@ class SyntaxTree extends assQuestion
 	{
 		global $ilDB;
 
-		$affectedRows = $ilDB->manipulateF("DELETE FROM qpl_fb_syntaxtree WHERE question_fi = %s AND answer = %s",
+		$affectedRows = $ilDB->manipulateF("DELETE FROM il_qpl_qst_syntaxtree_feedback WHERE question_fi = %s AND answer = %s",
 			array('integer','integer'),
 			array($this->getId(), $answer_index)
 		);
