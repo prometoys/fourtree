@@ -455,36 +455,14 @@ class SyntaxTreeGUI extends assQuestionGUI
 		return $result;
 	}
 
-	function outQuestionForTest($formaction, $active_id, $pass = NULL, $is_postponed = FALSE, $use_post_solutions = FALSE, $show_feedback = FALSE)
+	function outQuestionForTest($formaction, $active_id, $pass = NULL, $is_postponed = FALSE, $use_post_solutions = FALSE)
 	{
-		$test_output = $this->getTestOutput($active_id, $pass, $is_postponed, $use_post_solutions, $show_feedback);
+		$test_output = $this->getTestOutput($active_id, $pass, $is_postponed, $use_post_solutions);
 		$this->tpl->setVariable("QUESTION_OUTPUT", $test_output);
 		$this->tpl->setVariable("FORMACTION", $formaction);
 	}
 
-	/**
-	* Get the question solution output
-	*
-	* @param integer $active_id The active user id
-	* @param integer $pass The test pass
-	* @param boolean $graphicalOutput Show visual feedback for right/wrong answers
-	* @param boolean $result_output Show the reached points for parts of the question
-	* @param boolean $show_question_only Show the question without the ILIAS content around
-	* @param boolean $show_feedback Show the question feedback
-	* @param boolean $show_correct_solution Show the correct solution instead of the user solution
-	* @param boolean $show_manual_scoring Show specific information for the manual scoring output
-	* @return The solution output of the question as HTML code
-	*/
-	function getSolutionOutput(
-		$active_id, 
-		$pass = NULL, 
-		$graphicalOutput = FALSE, 
-		$result_output = FALSE, 
-		$show_question_only = TRUE, 
-		$show_feedback = FALSE, 
-		$show_correct_solution = FALSE
-		//$show_manual_scoring = FALSE
-	)
+	function getSolutionOutput($active_id, $pass = NULL, $graphicalOutput = FALSE, $result_output = FALSE, $show_question_only = TRUE, $show_feedback = FALSE, $show_correct_solution = FALSE)
 	{
 		// get the solution of the user for the active pass or from the last pass if allowed
 		$solutions = array();
@@ -775,7 +753,7 @@ class SyntaxTreeGUI extends assQuestionGUI
 			foreach ($this->object->answers as $index => $answer)
 			{
 				$answerobj = new ilTextAreaInputGUI($this->object->prepareTextareaOutput($answer->getAnswertext(), true), "feedback_answer_$index");
-				$answerobj->setValue($this->object->prepareTextareaOutput($this->object->getFeedbackGeneric($index)));
+				$answerobj->setValue($this->object->prepareTextareaOutput($this->object->getFeedbackSyntaxTree($index)));
 				$answerobj->setRequired(false);
 				$answerobj->setRows(10);
 				$answerobj->setCols(80);
