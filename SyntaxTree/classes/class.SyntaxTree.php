@@ -880,7 +880,7 @@ class SyntaxTree extends assQuestion
 	* @param string $feedback Feedback text
 	* @access public
 	*/
-	function saveFeedbackSingleAnswer($answer_index, $feedback)
+	function saveFeedbackSyntaxTree($answer_index, $feedback)
 	{
 		global $ilDB;
 
@@ -912,7 +912,7 @@ class SyntaxTree extends assQuestion
 	* @return string Feedback text
 	* @access public
 	*/
-	function getFeedbackSingleAnswer($answer_index)
+	function getFeedbackSyntaxTree($answer_index)
 	{
 		global $ilDB;
 		
