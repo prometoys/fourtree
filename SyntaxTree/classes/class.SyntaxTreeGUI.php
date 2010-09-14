@@ -625,7 +625,7 @@ class SyntaxTreeGUI extends assQuestionGUI
 			{
 				if ($idx == $i)
 				{
-					$template->setVariable("TEXTFIELD_VALUE", " value=\"" . $solution_value["value1"]."\"");
+					$template->setVariable("TEXTFIELD_VALUE", $solution_value["value1"]);
 				}
 			}
 			$template->setVariable("COUNTER", $i+1);
