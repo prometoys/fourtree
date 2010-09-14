@@ -892,7 +892,7 @@ class SyntaxTree extends assQuestion
 		{
 			include_once("./Services/RTE/classes/class.ilRTE.php");
 			$next_id = $ilDB->nextId('qpl_fb_sc');
-			$affectedRows = $ilDB->manipulateF("INSERT INTO qpl_fb_syntaxtree (feedback_id, question_fi, answer, feedback, tstamp) VALUES (%s, %s, %s, %s, %s)",
+			$affectedRows = $ilDB->manipulateF("INSERT INTO il_qpl_qst_syntaxtree_feedback (feedback_id, question_fi, answer, feedback, tstamp) VALUES (%s, %s, %s, %s, %s)",
 				array('integer','integer','integer','text','integer'),
 				array(
 					$next_id,
@@ -917,7 +917,7 @@ class SyntaxTree extends assQuestion
 		global $ilDB;
 		
 		$feedback = "";
-		$result = $ilDB->queryF("SELECT * FROM qpl_fb_syntaxtree WHERE question_fi = %s AND answer = %s",
+		$result = $ilDB->queryF("SELECT * FROM il_qpl_qst_syntaxtree_feedback WHERE question_fi = %s AND answer = %s",
 			array('integer','integer'),
 			array($this->getId(), $answer_index)
 		);

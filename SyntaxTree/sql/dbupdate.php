@@ -19,14 +19,18 @@ CREATE TABLE IF NOT EXISTS `il_qpl_qst_syntaxtree_answer` (
   KEY `question_fi` (`question_fi`)
 ) ENGINE=MyISAM;
 
-DROP TABLE IF EXISTS `qpl_fb_syntaxtree`;
-CREATE TABLE IF NOT EXISTS `qpl_fb_syntaxtree` (
-  `feedback_id` int(10) unsigned NOT NULL default '0',
-  `question_fi`  int(10) unsigned NOT NULL default '0',
-  `answer`  int(10) unsigned NOT NULL default '0',
-  `feedback` text NOT NULL, 
-  `answer`  int(10) unsigned NOT NULL default '0',
-) ENGINE=MyISAM;
 
 <#2>
 REPLACE INTO `qpl_qst_type`(type_tag, plugin) VALUES ('SyntaxTree', 1);
+
+<#3>
+DROP TABLE IF EXISTS `il_qpl_qst_syntaxtree_feedback`;
+CREATE TABLE IF NOT EXISTS `il_qpl_qst_syntaxtree_feedback` (
+  `feedback_id` int(11) unsigned NOT NULL default '0',
+  `question_fi` int(11) unsigned NOT NULL default '0',
+  `answer` int(11) unsigned NOT NULL default '0',
+  `feedback` text NOT NULL, 
+  `tstamp` int(11) unsigned NOT NULL default '0',
+  PRIMARY KEY (`feedback_id),
+  KEY `question_fi` (`question_fi`)
+) ENGINE=MyISAM;
