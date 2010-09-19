@@ -294,7 +294,7 @@ class SyntaxTree extends assQuestion
 			$this->question = ilRTE::_replaceMediaObjectImageSrc($data->question_text, 1);
 			$this->correctanswers = $data->correctanswers;
 			$this->text_rating = $data->textgap_rating;
-			$this->setEstimatedWorkingTime(substr($data["working_time"], 0, 2), substr($data["working_time"], 3, 2), substr($data["working_time"], 6, 2));
+			$this->setEstimatedWorkingTime(substr($data->working_time, 0, 2), substr($data->working_time, 3, 2), substr($data->working_time, 6, 2));
 
 			$query = sprintf("SELECT * FROM il_qpl_qst_syntaxtree_answer WHERE question_fi = %s ORDER BY aorder ASC",
 				$ilDB->quote($question_id)

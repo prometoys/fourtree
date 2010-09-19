@@ -386,8 +386,6 @@ class SyntaxTreeGUI extends assQuestionGUI
 	 */
 	function writePostData()
 	{
-		//echo "here!"; exit;
-		//echo "<br>SyntaxTreeGUI->writePostData()";
 		$result = 0;
 		if (!$this->checkInput())
 		{
@@ -409,6 +407,11 @@ class SyntaxTreeGUI extends assQuestionGUI
 		$this->object->setSuggestedSolution($_POST["solution_hint"], 0);
 		$this->object->setCorrectAnswers($_POST["correctanswers"]);
 		$this->object->setTextRating($_POST["text_rating"]);
+		$this->object->setEstimatedWorkingTime(
+			$_POST["Estimated"]["h"],
+			$_POST["Estimated"]["m"],
+			$_POST["Estimated"]["s"]
+		);
 
 		//$saved = $this->writeOtherPostData($result);
 
