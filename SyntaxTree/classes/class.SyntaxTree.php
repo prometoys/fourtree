@@ -89,6 +89,21 @@ class SyntaxTree extends assQuestion
 		parent::__construct($title, $comment, $author, $owner, $question);
 		$this->answers = array();
 		$this->correctanswers = 0;
+		$this->plugin = null;
+	}
+
+	
+	/**
+	 * @return object The plugin object
+	 */
+	public function getPlugin() {
+		if ($this->plugin == null)
+		{
+			include_once "./Services/Component/classes/class.ilPlugin.php";
+			$this->plugin = ilPlugin::getPluginObject(IL_COMP_MODULE, "TestQuestionPool", "qst", "SyntaxTree");
+			
+		}
+		return $this->plugin;
 	}
 
 	/**
@@ -990,6 +1005,40 @@ class SyntaxTree extends assQuestion
 			$i++;
 		}
 		return $startrow + $i + 1;
+	}
+	
+	/**
+	* Creates a question from a QTI file
+	*
+	* Receives parameters from a QTI parser and creates a valid ILIAS question object
+	*
+	* @param object $item The QTI item object
+	* @param integer $questionpool_id The id of the parent questionpool
+	* @param integer $tst_id The id of the parent test if the question is part of a test
+	* @param object $tst_object A reference to the parent test object
+	* @param integer $question_counter A reference to a question counter to count the questions of an imported question pool
+	* @param array $import_mapping An array containing references to included ILIAS objects
+	* @access public
+	*/
+	function fromXML(&$item, &$questionpool_id, &$tst_id, &$tst_object, &$question_counter, &$import_mapping)
+	{
+		$this->getPlugin()->includeClass("import/qti12/class.SyntaxTreeImport.php");
+		$import = new SyntaxTreeImport($this);
+		$import->fromXML($item, $questionpool_id, $tst_id, $tst_object, $question_counter, $import_mapping);
+	}
+	
+	/**
+	* Returns a QTI xml representation of the question and sets the internal
+	* domxml variable with the DOM XML representation of the QTI xml representation
+	*
+	* @return string The QTI xml representation of the question
+	* @access public
+	*/
+	function toXML($a_include_header = true, $a_include_binary = true, $a_shuffle = false, $test_output = false, $force_image_references = false)
+	{
+		$this->getPlugin()->includeClass("export/qti12/class.SyntaxTreeExport.php");
+		$export = new SyntaxTreeExport($this);
+		return $export->toXML($a_include_header, $a_include_binary, $a_shuffle, $test_output, $force_image_references);
 	}
 }
 
