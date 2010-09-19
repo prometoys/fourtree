@@ -86,6 +86,7 @@ class SyntaxTreeExport extends assQuestionExport
 		$a_xml_writer->xmlElement("fieldlabel", NULL, "points");
 		$a_xml_writer->xmlElement("fieldentry", NULL, $this->object->getPoints());
 		$a_xml_writer->xmlEndTag("qtimetadatafield");
+		$a_xml_writer->xmlEndTag("qtimetadata");
 // removed additional metadata from assFormulaQuestion
 		$a_xml_writer->xmlEndTag("itemmetadata");
 
@@ -102,8 +103,8 @@ class SyntaxTreeExport extends assQuestionExport
 		// add answers to presentation
 		$attrs = array();
 		$attrs = array(
-			"ident" => "MCSR",
-			"rcardinality" => "Single"
+			"ident" => "SYNTAXTREE",
+			"rcardinality" => "Multiple"
 		);
 		$a_xml_writer->xmlStartTag("response_lid", $attrs);
 		$solution = $this->object->getSuggestedSolution(0);
