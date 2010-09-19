@@ -1006,6 +1006,14 @@ class SyntaxTree extends assQuestion
 		}
 		return $startrow + $i + 1;
 	}
+
+    /**
+    * Returns a reference to the answers array
+    */
+    function &getAnswers()
+    {
+        return $this->answers;
+    }
 	
 	/**
 	* Creates a question from a QTI file
