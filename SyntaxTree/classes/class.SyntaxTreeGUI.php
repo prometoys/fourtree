@@ -50,9 +50,7 @@ class SyntaxTreeGUI extends assQuestionGUI
 	 * @access public
 	 * @ilCtrl_IsCalledBy SyntaxTreeGUI: ilObjQuestionPoolGUI
 	 */
-	function __construct(
-	$id = -1
-	)
+	function __construct(	$id = -1)
 	{
 		$this->ownDir = "./Customizing/global/plugins/Modules/TestQuestionPool/Questions/SyntaxTree";
 		$this->cssDir = "./Customizing/global/plugins/Modules/TestQuestionPool/Questions/SyntaxTree/css";
@@ -234,20 +232,6 @@ class SyntaxTreeGUI extends assQuestionGUI
 		$this->tpl->setVariable("TIME_FORMAT", $this->lng->txt("time_format"));
 		$this->tpl->setVariable("VALUE_WORKING_TIME", ilUtil::makeTimeSelect("Estimated", false, $est_working_time[h], $est_working_time[m], $est_working_time[s]));
 
-		if (count($this->object->suggested_solutions))
-		{
-			$solution_array = $this->object->getSuggestedSolution(0);
-			include_once "./Modules/TestQuestionPool/classes/class.assQuestion.php";
-			$href = assQuestion::_getInternalLinkHref($solution_array["internal_link"]);
-			$this->tpl->setVariable("TEXT_VALUE_SOLUTION_HINT", " <a href=\"$href\" target=\"content\">" . $this->lng->txt("solution_hint"). "</a> ");
-			$this->tpl->setVariable("BUTTON_REMOVE_SOLUTION", $this->lng->txt("remove"));
-			$this->tpl->setVariable("BUTTON_ADD_SOLUTION", $this->lng->txt("change"));
-			$this->tpl->setVariable("VALUE_SOLUTION_HINT", $solution_array["internal_link"]);
-		}
-		else
-		{
-			$this->tpl->setVariable("BUTTON_ADD_SOLUTION", $this->lng->txt("add"));
-		}
 		$this->tpl->setVariable("SAVE",$this->lng->txt("save"));
 		$this->tpl->setVariable("SAVE_EDIT", $this->lng->txt("save_edit"));
 		$this->tpl->setVariable("CANCEL",$this->lng->txt("cancel"));
@@ -648,30 +632,30 @@ class SyntaxTreeGUI extends assQuestionGUI
 		return $pageoutput;
 	}
 
-	function addSuggestedSolution()
-	{
-		$_SESSION["subquestion_index"] = 0;
-		if ($_POST["cmd"]["addSuggestedSolution"])
-		{
-			if ($this->writePostData())
-			{
-				ilUtil::sendInfo($this->getErrorMessage());
-				$this->editQuestion();
-				return;
-			}
-			if (!$this->checkInput())
-			{
-				ilUtil::sendInfo($this->lng->txt("fill_out_all_required_fields_add_answer"));
-				$this->editQuestion();
-				return;
-			}
-		}
-		$this->object->saveToDb();
-		$this->ctrl->setParameter($this, "q_id", $this->object->getId());
-		$this->tpl->setVariable("HEADER", $this->object->getTitle());
-		$this->getQuestionTemplate();
-		parent::addSuggestedSolution();
-	}
+#	function addSuggestedSolution()
+#	{
+#		$_SESSION["subquestion_index"] = 0;
+#		if ($_POST["cmd"]["addSuggestedSolution"])
+#		{
+#			if ($this->writePostData())
+#			{
+#				ilUtil::sendInfo($this->getErrorMessage());
+#				$this->editQuestion();
+#				return;
+#			}
+#			if (!$this->checkInput())
+#			{
+#				ilUtil::sendInfo($this->lng->txt("fill_out_all_required_fields_add_answer"));
+#				$this->editQuestion();
+#				return;
+#			}
+#		}
+#		$this->object->saveToDb();
+#		$this->ctrl->setParameter($this, "q_id", $this->object->getId());
+#		$this->tpl->setVariable("HEADER", $this->object->getTitle());
+#		$this->getQuestionTemplate();
+#		parent::addSuggestedSolution();
+#	}
 
 	/**
 	 * Saves the feedback for a single choice question
@@ -873,7 +857,19 @@ class SyntaxTreeGUI extends assQuestionGUI
 			array("feedback", "saveFeedback"),
 			$classname, "");
 		}
-
+		
+		if ($_GET["q_id"])
+		{
+			$ilTabs->addTarget("solution_hint",
+				$this->ctrl->getLinkTargetByClass($classname, "suggestedsolution"),
+				array("suggestedsolution", "saveSuggestedSolution", "outSolutionExplorer", "cancel", 
+				"addSuggestedSolution","cancelExplorer", "linkChilds", "removeSuggestedSolution"
+				),
+				$classname, 
+				""
+			);
+		}
+		
 		// Assessment of questions sub menu entry
 		if ($_GET["q_id"])
 		{

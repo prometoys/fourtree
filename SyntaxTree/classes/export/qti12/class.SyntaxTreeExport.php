@@ -86,6 +86,14 @@ class SyntaxTreeExport extends assQuestionExport
 		$a_xml_writer->xmlElement("fieldlabel", NULL, "points");
 		$a_xml_writer->xmlElement("fieldentry", NULL, $this->object->getPoints());
 		$a_xml_writer->xmlEndTag("qtimetadatafield");
+		$a_xml_writer->xmlStartTag("qtimetadatafield");
+		$a_xml_writer->xmlElement("fieldlabel", NULL, "textrating");
+		$a_xml_writer->xmlElement("fieldentry", NULL, $this->object->getTextRating());
+		$a_xml_writer->xmlEndTag("qtimetadatafield");
+		$a_xml_writer->xmlStartTag("qtimetadatafield");
+		$a_xml_writer->xmlElement("fieldlabel", NULL, "requestedanswers");
+		$a_xml_writer->xmlElement("fieldentry", NULL, $this->object->getCorrectAnswers());
+		$a_xml_writer->xmlEndTag("qtimetadatafield");
 		$a_xml_writer->xmlEndTag("qtimetadata");
 // removed additional metadata from assFormulaQuestion
 		$a_xml_writer->xmlEndTag("itemmetadata");
@@ -103,7 +111,7 @@ class SyntaxTreeExport extends assQuestionExport
 		// add answers to presentation
 		$attrs = array();
 		$attrs = array(
-			"ident" => "SYNTAXTREE",
+			"ident" => "SYNTAX TREE",
 			"rcardinality" => "Multiple"
 		);
 		$a_xml_writer->xmlStartTag("response_lid", $attrs);
@@ -167,7 +175,7 @@ class SyntaxTreeExport extends assQuestionExport
 			$a_xml_writer->xmlStartTag("conditionvar");
 			$attrs = array();
 			$attrs = array(
-				"respident" => "MCSR"
+				"respident" => "SyntaxTree"
 			);
 			$a_xml_writer->xmlElement("varequal", $attrs, $index);
 			$a_xml_writer->xmlEndTag("conditionvar");
@@ -206,7 +214,7 @@ class SyntaxTreeExport extends assQuestionExport
 				}
 			}
 			$attrs = array(
-				"respident" => "MCSR"
+				"respident" => "SyntaxTree"
 			);
 			$a_xml_writer->xmlElement("varequal", $attrs, $bestindex);
 			$a_xml_writer->xmlEndTag("conditionvar");
@@ -239,7 +247,7 @@ class SyntaxTreeExport extends assQuestionExport
 				}
 			}
 			$attrs = array(
-				"respident" => "MCSR"
+				"respident" => "SyntaxTree"
 			);
 			$a_xml_writer->xmlStartTag("not");
 			$a_xml_writer->xmlElement("varequal", $attrs, $bestindex);
