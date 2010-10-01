@@ -71,47 +71,8 @@ class SyntaxTreeImport extends assQuestionImport
 		$this->object->setQuestion($this->object->QTIMaterialToString($item->getQuestiontext()));
 		$this->object->setObjId($questionpool_id);
 		$this->object->setEstimatedWorkingTime($duration["h"], $duration["m"], $duration["s"]);
-		if (preg_match_all("/(\\\$v\\d+)/ims", $this->object->getQuestion(), $matches))
-		{
-			foreach ($matches[1] as $variable)
-			{
-				$data = unserialize($item->getMetadataEntry($variable));
-				$unit = $this->object->getUnit($data["unitvalue"]);
-				$this->object->getPlugin()->includeClass("class.assFormulaQuestionVariable.php");
-				$varObj = new assFormulaQuestionVariable($variable, $data["rangemin"], $data["rangemax"], $unit, $data["precision"], $data["intprecision"]);
-				$this->object->addVariable($varObj);
-			}
-		}
-		if (preg_match_all("/(\\\$r\\d+)/ims", $this->object->getQuestion(), $rmatches))
-		{
-			foreach ($rmatches[1] as $result)
-			{
-				$data = unserialize($item->getMetadataEntry($result));
-				$unit = $this->object->getUnit($data["unitvalue"]);
-				$this->object->getPlugin()->includeClass("class.assFormulaQuestionResult.php");
-				if (!is_array($data["rating"]))
-				{
-					$resObj = new assFormulaQuestionResult($result, $data["rangemin"], $data["rangemax"], $data["tolerance"], $unit, $data["formula"], $data["points"], $data["precision"], TRUE);
-				}
-				else
-				{
-					$resObj = new assFormulaQuestionResult($result, $data["rangemin"], $data["rangemax"], $data["tolerance"], $unit, $data["formula"], $data["points"], $data["precision"], FALSE, $data["rating"]["sign"], $data["rating"]["value"], $data["rating"]["unit"]);
-				}
-				$this->object->addResult($resObj);
-				if (is_array($data["resultunits"]))
-				{
-					foreach ($data["resultunits"] as $resu)
-					{
-						$ru = $this->object->getUnit($resu["unitvalue"]);
-						if (is_object($ru))
-						{
-							$this->object->addResultUnit($resObj, $ru);
-						}
-					}
-				}
-			}
-		}
 		$this->object->setPoints($item->getMetadataEntry("points"));
+		
 		$this->object->saveToDb();
 /*
 		foreach ($feedbacksgeneric as $correctness => $material)
