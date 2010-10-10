@@ -113,20 +113,6 @@ class SyntaxTreeGUI extends assQuestionGUI
 			$this->tpl->parseCurrentBlock();
 		}
 
-		$internallinks = array(
-			"lm" => $this->lng->txt("obj_lm"),
-			"st" => $this->lng->txt("obj_st"),
-			"pg" => $this->lng->txt("obj_pg"),
-			"glo" => $this->lng->txt("glossary_term")
-		);
-		foreach ($internallinks as $key => $value)
-		{
-			$this->tpl->setCurrentBlock("internallink");
-			$this->tpl->setVariable("TYPE_INTERNAL_LINK", $key);
-			$this->tpl->setVariable("TEXT_INTERNAL_LINK", $value);
-			$this->tpl->parseCurrentBlock();
-		}
-
 		$this->tpl->setCurrentBlock("HeadContent");
 		if ($this->object->getAnswerCount() == 0)
 		{
@@ -221,7 +207,6 @@ class SyntaxTreeGUI extends assQuestionGUI
 		$this->tpl->setVariable("TEXT_AUTHOR", $this->lng->txt("author"));
 		$this->tpl->setVariable("TEXT_COMMENT", $this->lng->txt("description"));
 		$this->tpl->setVariable("TEXT_QUESTION", $this->lng->txt("question"));
-		$this->tpl->setVariable("TEXT_SOLUTION_HINT", $this->lng->txt("solution_hint"));
 		$this->tpl->setVariable("TEXT_RATING", $this->lng->txt("text_rating"));
 		$this->tpl->setVariable("TEXT_POINTS", $this->lng->txt("maximum_points"));
 		$this->tpl->setVariable("TEXT_CORRECTANSWERS", $this->lng->txt("nr_of_correct_answers"));
@@ -388,7 +373,6 @@ class SyntaxTreeGUI extends assQuestionGUI
 		include_once "./Services/AdvancedEditing/classes/class.ilObjAdvancedEditing.php";
 		$questiontext = ilUtil::stripSlashes($_POST["question"], false, ilObjAdvancedEditing::_getUsedHTMLTagsAsString("assessment"));
 		$this->object->setQuestion($questiontext);
-		$this->object->setSuggestedSolution($_POST["solution_hint"], 0);
 		$this->object->setCorrectAnswers($_POST["correctanswers"]);
 		$this->object->setTextRating($_POST["text_rating"]);
 		$this->object->setEstimatedWorkingTime(
