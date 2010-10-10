@@ -21,19 +21,23 @@
    +----------------------------------------------------------------------------+
 */
 
-include_once "./Modules/TestQuestionPool/classes/export/qti12/class.assQuestionImport.php";
+include_once "./Modules/TestQuestionPool/classes/import/qti12/class.assQuestionImport.php";
 
 /**
-* Class for formula question imports
-*
 * SyntaxTreeImport is a class for SyntaxTree question imports
 *
 * @author		Uni Bi ProSem Team 
 *
-* Based on:
+* Based on:* SyntaxTreeImport is a class for SyntaxTree question imports
+*
+* @author		Uni Bi ProSem Team 
+*
+* Based on: Class for essay question imports
+*
+* SyntaxTreeImport is a class for essay question imports
 *
 * @author		Helmut Schottmüller <helmut.schottmueller@mac.com>
-* @version	$Id: class.assFormulaQuestionImport.php 1185 2010-02-02 08:36:26Z hschottm $
+* @version	$Id$
 * @ingroup ModulesTestQuestionPool
 */
 class SyntaxTreeImport extends assQuestionImport
@@ -60,10 +64,97 @@ class SyntaxTreeImport extends assQuestionImport
 		$presentation = $item->getPresentation(); 
 		$duration = $item->getDuration();
 		$now = getdate();
+		$maxchars = 0;
+		$maxpoints = 0;
 		$created = sprintf("%04d%02d%02d%02d%02d%02d", $now['year'], $now['mon'], $now['mday'], $now['hours'], $now['minutes'], $now['seconds']);
+		foreach ($presentation->order as $entry)
+		{
+			switch ($entry["type"])
+			{
+				case "response":
+					$response = $presentation->response[$entry["index"]];
+					$rendertype = $response->getRenderType(); 
+					switch (strtolower(get_class($rendertype)))
+					{
+						case "ilqtirenderfib":
+							$maxchars = $rendertype->getMaxchars();
+							break;
+					}
+					break;
+			}
+		}
 
 		$feedbacksgeneric = array();
+		foreach ($item->resprocessing as $resprocessing)
+		{
+			$outcomes = $resprocessing->getOutcomes();
+			foreach ($outcomes->decvar as $decvar)
+			{
+				$maxpoints = $decvar->getMaxvalue();
+			}
 
+			foreach ($resprocessing->respcondition as $respcondition)
+			{
+				foreach ($respcondition->displayfeedback as $feedbackpointer)
+				{
+					if (strlen($feedbackpointer->getLinkrefid()))
+					{
+						foreach ($item->itemfeedback as $ifb)
+						{
+							if (strcmp($ifb->getIdent(), "response_allcorrect") == 0)
+							{
+								// found a feedback for the identifier
+								if (count($ifb->material))
+								{
+									foreach ($ifb->material as $material)
+									{
+										$feedbacksgeneric[1] = $material;
+									}
+								}
+								if ((count($ifb->flow_mat) > 0))
+								{
+									foreach ($ifb->flow_mat as $fmat)
+									{
+										if (count($fmat->material))
+										{
+											foreach ($fmat->material as $material)
+											{
+												$feedbacksgeneric[1] = $material;
+											}
+										}
+									}
+								}
+							} 
+							else if (strcmp($ifb->getIdent(), "response_onenotcorrect") == 0)
+							{
+								// found a feedback for the identifier
+								if (count($ifb->material))
+								{
+									foreach ($ifb->material as $material)
+									{
+										$feedbacksgeneric[0] = $material;
+									}
+								}
+								if ((count($ifb->flow_mat) > 0))
+								{
+									foreach ($ifb->flow_mat as $fmat)
+									{
+										if (count($fmat->material))
+										{
+											foreach ($fmat->material as $material)
+											{
+												$feedbacksgeneric[0] = $material;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
 		$this->object->setTitle($item->getTitle());
 		$this->object->setComment($item->getComment());
 		$this->object->setAuthor($item->getAuthor());
@@ -71,16 +162,32 @@ class SyntaxTreeImport extends assQuestionImport
 		$this->object->setQuestion($this->object->QTIMaterialToString($item->getQuestiontext()));
 		$this->object->setObjId($questionpool_id);
 		$this->object->setEstimatedWorkingTime($duration["h"], $duration["m"], $duration["s"]);
-		$this->object->setPoints($item->getMetadataEntry("points"));
-		
+		$this->object->setPoints($maxpoints);
+		$this->object->setMaxNumOfChars($maxchars);
+		$textrating = $item->getMetadataEntry("textrating");
+		if (strlen($textrating))
+		{
+			$this->object->setTextRating($textrating);
+		}
+		$keywords = $item->getMetadataEntry("keywords");
+		if (strlen($keywords))
+		{
+			$this->object->setKeywords($keywords);
+		}
 		$this->object->saveToDb();
-/*
+		if (count($item->suggested_solutions))
+		{
+			foreach ($item->suggested_solutions as $suggested_solution)
+			{
+				$this->object->setSuggestedSolution($suggested_solution["solution"]->getContent(), $suggested_solution["gap_index"], true);
+			}
+			$this->object->saveToDb();
+		}
 		foreach ($feedbacksgeneric as $correctness => $material)
 		{
 			$m = $this->object->QTIMaterialToString($material);
 			$feedbacksgeneric[$correctness] = $m;
 		}
-*/
 		// handle the import of media objects in XHTML code
 		$questiontext = $this->object->getQuestion();
 		if (is_array($_SESSION["import_mob_xhtml"]))
@@ -102,30 +209,18 @@ class SyntaxTreeImport extends assQuestionImport
 				$media_object =& ilObjMediaObject::_saveTempFileAsMediaObject(basename($importfile), $importfile, FALSE);
 				ilObjMediaObject::_saveUsage($media_object->getId(), "qpl:html", $this->object->getId());
 				$questiontext = str_replace("src=\"" . $mob["mob"] . "\"", "src=\"" . "il_" . IL_INST_ID . "_mob_" . $media_object->getId() . "\"", $questiontext);
-/*
 				foreach ($feedbacksgeneric as $correctness => $material)
 				{
 					$feedbacksgeneric[$correctness] = str_replace("src=\"" . $mob["mob"] . "\"", "src=\"" . "il_" . IL_INST_ID . "_mob_" . $media_object->getId() . "\"", $material);
 				}
-*/				
 			}
 		}
 		$this->object->setQuestion(ilRTE::_replaceMediaObjectImageSrc($questiontext, 1));
-/*
 		foreach ($feedbacksgeneric as $correctness => $material)
 		{
 			$this->object->saveFeedbackGeneric($correctness, ilRTE::_replaceMediaObjectImageSrc($material, 1));
 		}
-*/		
 		$this->object->saveToDb();
-		if (count($item->suggested_solutions))
-		{
-			foreach ($item->suggested_solutions as $suggested_solution)
-			{
-				$this->object->setSuggestedSolution($suggested_solution["solution"]->getContent(), $suggested_solution["gap_index"], true);
-			}
-			$this->object->saveToDb();
-		}
 		if ($tst_id > 0)
 		{
 			$q_1_id = $this->object->getId();
