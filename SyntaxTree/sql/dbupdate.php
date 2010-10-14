@@ -1,9 +1,9 @@
 <#1>
-<?
-if($ilDB->tableExists('il_qpl_qst_syntaxtree_question'))
-        $ilDB->dropTable('il_qpl_qst_syntaxtree_question');
+<?php
+if($ilDB->tableExists('il_qpl_qst_st_quest'))
+        $ilDB->dropTable('il_qpl_qst_st_quest');
 
-if(!$ilDB->tableExists('il_qpl_qst_syntaxtree_question'))
+if(!$ilDB->tableExists('il_qpl_qst_st_quest'))
 {
         $fields = array (
                 'question_fi' => array
@@ -28,14 +28,14 @@ if(!$ilDB->tableExists('il_qpl_qst_syntaxtree_question'))
                         'default' => 0
                 )
         );
-        $ilDB->createTable('il_qpl_qst_syntaxtree_question', $fields);
-        $ilDB->addIndex('il_qpl_qst_syntaxtree_question', array('question_fi'), 'i1');
+        $ilDB->createTable('il_qpl_qst_st_quest', $fields);
+        $ilDB->addIndex('il_qpl_qst_st_quest', array('question_fi'), 'i1');
 }
 
-if($ilDB->tableExists('il_qpl_qst_syntaxtree_answer'))
-        $ilDB->dropTable('il_qpl_qst_syntaxtree_answer');
+if($ilDB->tableExists('il_qpl_qst_st_answer'))
+        $ilDB->dropTable('il_qpl_qst_st_answer');
 
-if(!$ilDB->tableExists('il_qpl_qst_syntaxtree_answer'))
+if(!$ilDB->tableExists('il_qpl_qst_st_answer'))
 {
         $fields = array (
                 'answer_id' => array
@@ -80,10 +80,10 @@ if(!$ilDB->tableExists('il_qpl_qst_syntaxtree_answer'))
                         'default' => 0 
                 ), 
         );
-        $ilDB->createTable('il_qpl_qst_syntaxtree_answer', $fields);
-        $ilDB->addPrimaryKey('il_qpl_qst_syntaxtree_answer',array('answer_id'));
-        $ilDB->addIndex('il_qpl_qst_syntaxtree_answer', array('question_fi'), 'i1');
-        $ilDB->createSequence('il_qpl_qst_syntaxtree_answer');
+        $ilDB->createTable('il_qpl_qst_st_answer', $fields);
+        $ilDB->addPrimaryKey('il_qpl_qst_st_answer',array('answer_id'));
+        $ilDB->addIndex('il_qpl_qst_st_answer', array('question_fi'), 'i1');
+        $ilDB->createSequence('il_qpl_qst_st_answer');
 }
 ?>
 <#2>
@@ -106,10 +106,10 @@ if ($res->numRows() == 0)
 ?>
 <#3>
 <?php
-if($ilDB->tableExists('il_qpl_qst_syntaxtree_feedback'))
-        $ilDB->dropTable('il_qpl_qst_syntaxtree_feedback');
+if($ilDB->tableExists('il_qpl_qst_st_feedb'))
+        $ilDB->dropTable('il_qpl_qst_st_feedb');
 
-if(!$ilDB->tableExists('il_qpl_qst_syntaxtree_feedback'))
+if(!$ilDB->tableExists('il_qpl_qst_st_feedb'))
 {
         $fields = array (
                 'feedback_id' => array
@@ -148,9 +148,9 @@ if(!$ilDB->tableExists('il_qpl_qst_syntaxtree_feedback'))
                         'default' => 0
                 ),
         );
-        $ilDB->createTable('il_qpl_qst_syntaxtree_feedback', $fields);
-        $ilDB->addPrimaryKey('il_qpl_qst_syntaxtree_feedback',array('feedback_id'));
-        $ilDB->addIndex('il_qpl_qst_syntaxtree_feedback', array('question_fi'), 'i1');
-        $ilDB->createSequence('il_qpl_qst_syntaxtree_feedback');
+        $ilDB->createTable('il_qpl_qst_st_feedb', $fields);
+        $ilDB->addPrimaryKey('il_qpl_qst_st_feedb',array('feedback_id'));
+        $ilDB->addIndex('il_qpl_qst_st_feedb', array('question_fi'), 'i1');
+        $ilDB->createSequence('il_qpl_qst_st_feedb');
 }
 ?>

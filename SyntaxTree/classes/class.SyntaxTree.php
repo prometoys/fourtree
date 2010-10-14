@@ -191,7 +191,7 @@ class SyntaxTree extends assQuestion
 			else
 			{
 				$this->id = $ilDB->getLastInsertId();
-				$query = sprintf("INSERT INTO il_qpl_qst_syntaxtree_question (question_fi, textgap_rating, correctanswers) VALUES (%s, %s, %s)",
+				$query = sprintf("INSERT INTO il_qpl_qst_st_quest (question_fi, textgap_rating, correctanswers) VALUES (%s, %s, %s)",
 					$ilDB->quote($this->id . ""),
 					$ilDB->quote($this->getTextRating() . ""),
 					$ilDB->quote($this->getCorrectAnswers() . "")
@@ -223,7 +223,7 @@ class SyntaxTree extends assQuestion
 				$ilDB->quote($this->id)
 			);
 			$result = $ilDB->query($query);
-			$query = sprintf("UPDATE il_qpl_qst_syntaxtree_question SET textgap_rating = %s, correctanswers = %s WHERE question_fi = %s",
+			$query = sprintf("UPDATE il_qpl_qst_st_quest SET textgap_rating = %s, correctanswers = %s WHERE question_fi = %s",
 				$ilDB->quote($this->getTextRating() . ""),
 				$ilDB->quote($this->getCorrectAnswers() . ""),
 				$ilDB->quote($this->id . "")
@@ -240,7 +240,7 @@ class SyntaxTree extends assQuestion
 			// Write Ranges to the database
 			
 			// 1. delete old ranges
-			$query = sprintf("DELETE FROM il_qpl_qst_syntaxtree_answer WHERE question_fi = %s",
+			$query = sprintf("DELETE FROM il_qpl_qst_st_answer WHERE question_fi = %s",
 				$ilDB->quote($this->id)
 			);
 			$result = $ilDB->query($query);
@@ -249,7 +249,7 @@ class SyntaxTree extends assQuestion
 			foreach ($this->answers as $key => $value)
 			{
 				$answer_obj = $this->answers[$key];
-				$query = sprintf("INSERT INTO il_qpl_qst_syntaxtree_answer (answer_id, question_fi, answertext, points, aorder) VALUES (NULL, %s, %s, %s, %s)",
+				$query = sprintf("INSERT INTO il_qpl_qst_st_answer (answer_id, question_fi, answertext, points, aorder) VALUES (NULL, %s, %s, %s, %s)",
 					$ilDB->quote($this->id),
 					$ilDB->quote($answer_obj->getAnswertext()),
 					$ilDB->quote($answer_obj->getPoints() . ""),
@@ -274,7 +274,7 @@ class SyntaxTree extends assQuestion
 	{
 		global $ilDB;
 
-    $query = sprintf("SELECT qpl_questions.*, il_qpl_qst_syntaxtree_question.* FROM qpl_questions, il_qpl_qst_syntaxtree_question WHERE question_id = %s AND qpl_questions.question_id = il_qpl_qst_syntaxtree_question.question_fi",
+    $query = sprintf("SELECT qpl_questions.*, il_qpl_qst_st_quest.* FROM qpl_questions, il_qpl_qst_st_quest WHERE question_id = %s AND qpl_questions.question_id = il_qpl_qst_st_quest.question_fi",
 			$ilDB->quote($question_id)
 		);
 		$result = $ilDB->query($query);
@@ -296,7 +296,7 @@ class SyntaxTree extends assQuestion
 			$this->text_rating = $data->textgap_rating;
 			$this->setEstimatedWorkingTime(substr($data->working_time, 0, 2), substr($data->working_time, 3, 2), substr($data->working_time, 6, 2));
 
-			$query = sprintf("SELECT * FROM il_qpl_qst_syntaxtree_answer WHERE question_fi = %s ORDER BY aorder ASC",
+			$query = sprintf("SELECT * FROM il_qpl_qst_st_answer WHERE question_fi = %s ORDER BY aorder ASC",
 				$ilDB->quote($question_id)
 			);
 			$result = $ilDB->query($query);
@@ -795,7 +795,7 @@ class SyntaxTree extends assQuestion
 				$ilDB->quote($this->original_id. "")
 			);
 			$result = $ilDB->query($query);
-			$query = sprintf("UPDATE il_qpl_qst_syntaxtree_question SET textgap_rating = %s, correctanswers = %s WHERE question_fi = %s",
+			$query = sprintf("UPDATE il_qpl_qst_st_quest SET textgap_rating = %s, correctanswers = %s WHERE question_fi = %s",
 				$ilDB->quote($this->getTextRating() . ""),
 				$ilDB->quote($this->getCorrectAnswers() . ""),
 				$ilDB->quote($this->original_id . "")
@@ -812,7 +812,7 @@ class SyntaxTree extends assQuestion
 				// Write Ranges to the database
 				
 				// 1. delete old ranges
-				$query = sprintf("DELETE FROM il_qpl_qst_syntaxtree_answer WHERE question_fi = %s",
+				$query = sprintf("DELETE FROM il_qpl_qst_st_answer WHERE question_fi = %s",
 					$ilDB->quote($this->original_id)
 				);
 				$result = $ilDB->query($query);
@@ -821,7 +821,7 @@ class SyntaxTree extends assQuestion
 				foreach ($this->answers as $key => $value)
 				{
 					$answer_obj = $this->answers[$key];
-					$query = sprintf("INSERT INTO il_qpl_qst_syntaxtree_answer (answer_id, question_fi, answertext, points, aorder) VALUES (NULL, %s, %s, %s, %s)",
+					$query = sprintf("INSERT INTO il_qpl_qst_st_answer (answer_id, question_fi, answertext, points, aorder) VALUES (NULL, %s, %s, %s, %s)",
 						$ilDB->quote($this->original_id. ""),
 						$ilDB->quote($answer_obj->getAnswertext(). ""),
 						$ilDB->quote($answer_obj->getPoints() . ""),
@@ -899,7 +899,7 @@ class SyntaxTree extends assQuestion
 	{
 		global $ilDB;
 
-		$affectedRows = $ilDB->manipulateF("DELETE FROM il_qpl_qst_syntaxtree_feedback WHERE question_fi = %s AND answer = %s",
+		$affectedRows = $ilDB->manipulateF("DELETE FROM il_qpl_qst_st_feedb WHERE question_fi = %s AND answer = %s",
 			array('integer','integer'),
 			array($this->getId(), $answer_index)
 		);
@@ -907,7 +907,7 @@ class SyntaxTree extends assQuestion
 		{
 			include_once("./Services/RTE/classes/class.ilRTE.php");
 			$next_id = $ilDB->nextId('qpl_fb_sc');
-			$affectedRows = $ilDB->manipulateF("INSERT INTO il_qpl_qst_syntaxtree_feedback (feedback_id, question_fi, answer, feedback, tstamp) VALUES (%s, %s, %s, %s, %s)",
+			$affectedRows = $ilDB->manipulateF("INSERT INTO il_qpl_qst_st_feedb (feedback_id, question_fi, answer, feedback, tstamp) VALUES (%s, %s, %s, %s, %s)",
 				array('integer','integer','integer','text','integer'),
 				array(
 					$next_id,
@@ -932,7 +932,7 @@ class SyntaxTree extends assQuestion
 		global $ilDB;
 		
 		$feedback = "";
-		$result = $ilDB->queryF("SELECT * FROM il_qpl_qst_syntaxtree_feedback WHERE question_fi = %s AND answer = %s",
+		$result = $ilDB->queryF("SELECT * FROM il_qpl_qst_st_feedb WHERE question_fi = %s AND answer = %s",
 			array('integer','integer'),
 			array($this->getId(), $answer_index)
 		);
@@ -955,7 +955,7 @@ class SyntaxTree extends assQuestion
 	*/
 	function getAdditionalTableName()
 	{
-		return "il_qpl_qst_syntaxtree_question";
+		return "il_qpl_qst_st_quest";
 	}
 
 	/**
@@ -968,7 +968,7 @@ class SyntaxTree extends assQuestion
 	*/
 	function getAnswerTableName()
 	{
-		return "il_qpl_qst_syntaxtree_answer";
+		return "il_qpl_qst_st_answer";
 	}
 
 	/**
